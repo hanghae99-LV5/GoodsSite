@@ -39,11 +39,15 @@ public class CartService {
         User user = findUser(userId);
 
         // 이미 존재하는 상품
-        // TODO: 상품 최대개수만큼만 추가 가능
         Optional<Cart> duplicatedCart = cartRepository.findByProduct(product);
         duplicatedCart.ifPresent(item -> {
             throw new IllegalArgumentException("이미 상품이 존재합니다.");
         });
+
+        // 상품의 개수와 장바구니 개수 비교
+        if (requestDto.getCount() > product.getCount()) {
+            throw new IllegalArgumentException("상품의 최대 개수는 " + product.getCount() + " 입니다.");
+        }
 
         // 상품이 카트에 없으면 새로운 카트 아이템을 추가
         Cart cart = new Cart(requestDto, user, product);
@@ -82,7 +86,10 @@ public class CartService {
             throw new IllegalArgumentException("장바구니의 주인이 아닙니다.");
         }
 
-        // TODO: 물건의 최대개수보다는 못 넣는다.
+        // 상품의 개수와 장바구니 개수 비교
+        if (cartRequestDto.getCount()  > cart.getProduct().getCount()) {
+            throw new IllegalArgumentException("상품의 최대 개수는 " + cart.getProduct().getCount() + " 입니다.");
+        }
 
         cart.countUpdate(cartRequestDto.getCount());
         return ResponseEntity.status(HttpStatus.OK).body("장바구니 수량을 수정하였습니다.");
@@ -106,4 +113,5 @@ public class CartService {
         return cartRepository.findById(cartId)
                 .orElseThrow(() -> new EntityNotFoundException("카트가 담겨있는 아이템이 아닙니다."));
     }
+
 }
