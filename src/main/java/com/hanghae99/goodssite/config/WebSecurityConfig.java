@@ -68,12 +68,12 @@ public class WebSecurityConfig {
                 authorizeHttpRequests
 //                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
                         .requestMatchers("/").permitAll() // 메인 페이지 요청 허가
-                        .requestMatchers("/signup").permitAll() // '/api/user/'로 시작하는 요청 모두 접근 허가
-                        .requestMatchers("/signin").permitAll() // '/api/user/'로 시작하는 요청 모두 접근 허가
+                        .requestMatchers("/signup").permitAll() // '/signup'으로 시작하는 요청 모두 접근 허가
+                        .requestMatchers("/signin").permitAll() // '/signin'으로 시작하는 요청 모두 접근 허가
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll() // swagger
-                        .requestMatchers("/cart/**").permitAll() // 선택한 강의 조회// 카테고리별 강의 조회
-                        .requestMatchers("/products/**").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/products/**").hasAuthority(UserRoleEnum.Authority.ADMIN)
+                        .requestMatchers("/cart/**").permitAll() // '/cart'로 시작하는 요청 모두 접근 허가
+                        .requestMatchers("/products/**").permitAll() // '/products'로 시작하는 요청 모두 접근 허가
+                        .requestMatchers(HttpMethod.POST,"/products").hasAuthority(UserRoleEnum.Authority.ADMIN)
                         .anyRequest().authenticated() // 그 외 모든 요청 인증처리
         );
 

@@ -1,7 +1,7 @@
 package com.hanghae99.goodssite.service;
 
-import com.hanghae99.goodssite.dto.ProductRequestDto;
-import com.hanghae99.goodssite.dto.ProductResponseDto;
+import com.hanghae99.goodssite.dto.product.ProductRequestDto;
+import com.hanghae99.goodssite.dto.product.ProductResponseDto;
 import com.hanghae99.goodssite.entity.Product;
 import com.hanghae99.goodssite.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;

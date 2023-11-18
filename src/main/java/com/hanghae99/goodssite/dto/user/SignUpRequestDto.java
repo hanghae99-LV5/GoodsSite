@@ -1,5 +1,6 @@
 package com.hanghae99.goodssite.dto.user;
 
+import com.hanghae99.goodssite.annotation.Password;
 import com.hanghae99.goodssite.entity.UserRoleEnum;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
@@ -10,6 +11,7 @@ import lombok.Getter;
 public class SignUpRequestDto {
     @Email
     private String email;
+    @Password
     private String password;
     private char gender;
     private String phone;

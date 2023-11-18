@@ -1,7 +1,6 @@
 package com.hanghae99.goodssite.entity;
 
-import com.hanghae99.goodssite.dto.ProductRequestDto;
-import com.hanghae99.goodssite.repository.ProductRepository;
+import com.hanghae99.goodssite.dto.product.ProductRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

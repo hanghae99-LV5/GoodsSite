@@ -1,7 +1,7 @@
 package com.hanghae99.goodssite.controller;
 
-import com.hanghae99.goodssite.dto.ProductRequestDto;
-import com.hanghae99.goodssite.dto.ProductResponseDto;
+import com.hanghae99.goodssite.dto.product.ProductRequestDto;
+import com.hanghae99.goodssite.dto.product.ProductResponseDto;
 import com.hanghae99.goodssite.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
