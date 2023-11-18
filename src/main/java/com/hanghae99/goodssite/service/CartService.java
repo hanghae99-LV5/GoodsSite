@@ -88,6 +88,15 @@ public class CartService {
         return ResponseEntity.status(HttpStatus.OK).body("장바구니 수량을 수정하였습니다.");
     }
 
+    public ResponseEntity deleteCartItem(Long cartId) {
+        // 장바구니 아이템 조회
+        Cart cart = findCartItem(cartId);
+
+        // 삭제
+        cartRepository.delete(cart);
+        return ResponseEntity.status(HttpStatus.OK).body("장바구니 아이템을 삭제하였습니다.");
+    }
+
     private User findUser(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("회원이 아니거나 유저를 찾을 수 없습니다."));
@@ -97,5 +106,4 @@ public class CartService {
         return cartRepository.findById(cartId)
                 .orElseThrow(() -> new EntityNotFoundException("카트가 담겨있는 아이템이 아닙니다."));
     }
-
 }
