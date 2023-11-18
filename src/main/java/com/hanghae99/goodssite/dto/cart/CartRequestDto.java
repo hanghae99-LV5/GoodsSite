@@ -1,4 +1,4 @@
-package com.hanghae99.goodssite.dto;
+package com.hanghae99.goodssite.dto.cart;
 
 import com.hanghae99.goodssite.entity.Product;
 import lombok.Getter;

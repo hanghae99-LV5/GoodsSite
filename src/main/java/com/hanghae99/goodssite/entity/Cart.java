@@ -1,6 +1,6 @@
 package com.hanghae99.goodssite.entity;
 
-import com.hanghae99.goodssite.dto.CartRequestDto;
+import com.hanghae99.goodssite.dto.cart.CartRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,18 +19,23 @@ public class Cart {
     private int count;
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
-    public Cart(CartRequestDto requestDto) {
+
+    public Cart(CartRequestDto requestDto, User user, Product product) {
         this.count = requestDto.getCount();
+        this.user = user;
+        this.product = product;
     }
 
     public void setCountPlus(int count) {
         this.count = count;
     }
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    private User user;
+
 }
