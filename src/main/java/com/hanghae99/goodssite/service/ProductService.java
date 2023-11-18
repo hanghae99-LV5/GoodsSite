@@ -5,6 +5,10 @@ import com.hanghae99.goodssite.dto.ProductResponseDto;
 import com.hanghae99.goodssite.entity.Product;
 import com.hanghae99.goodssite.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,5 +23,24 @@ public class ProductService {
 
 
 
+    }
+    public ProductResponseDto findProductById(Long id) {
+        Product product = findProduct(id);
+        return new ProductResponseDto(product);
+
+
+    }
+    private Product findProduct(Long id) {
+        return productRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("해당하는 상품이 없습니다"));
+    }
+
+    public Page<ProductResponseDto> getProducts(int page, int size, String sortBy, String sortOrder) {
+        Sort.Direction direction = "asc".equalsIgnoreCase(sortOrder) ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Sort sort = Sort.by(direction, sortBy);
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<Product> productList;
+        productList = productRepository.findAll(pageable);
+        return productList.map(ProductResponseDto::new);
     }
 }
