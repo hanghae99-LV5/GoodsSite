@@ -30,4 +30,11 @@ public class CartController {
         Long userId = userDetails.getUser().getId();
         return cartService.cartList(userId);
     }
+
+    @PutMapping("/{cartId}")
+    public ResponseEntity editCartItem(@RequestBody CartRequestDto cartRequestDto, @PathVariable Long cartId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        Long userId = userDetails.getUser().getId();
+        return cartService.editCartItem(cartRequestDto, cartId, userId);
+    }
+
 }

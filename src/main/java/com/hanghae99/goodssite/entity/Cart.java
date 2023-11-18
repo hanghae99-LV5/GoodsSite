@@ -33,9 +33,8 @@ public class Cart {
         this.product = product;
     }
 
-    public void setCountPlus(int count) {
+
+    public void countUpdate(int count) {
         this.count = count;
     }
-
-
 }

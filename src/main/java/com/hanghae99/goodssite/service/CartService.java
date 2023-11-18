@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -68,8 +69,33 @@ public class CartService {
         return responseWrapper;
     }
 
+    @Transactional
+    public ResponseEntity editCartItem(CartRequestDto cartRequestDto, Long cartId, Long userId) {
+        // 유저 조회
+        User user = findUser(userId);
+
+        // 장바구니 아이템 조회
+        Cart cart = findCartItem(cartId);
+
+        // 유저와 장바구니 비교
+        if (!Objects.equals(user.getId(), cart.getUser().getId())) {
+            throw new IllegalArgumentException("장바구니의 주인이 아닙니다.");
+        }
+
+        // TODO: 물건의 최대개수보다는 못 넣는다.
+
+        cart.countUpdate(cartRequestDto.getCount());
+        return ResponseEntity.status(HttpStatus.OK).body("장바구니 수량을 수정하였습니다.");
+    }
+
     private User findUser(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("회원이 아니거나 유저를 찾을 수 없습니다."));
     }
+
+    private Cart findCartItem(Long cartId) {
+        return cartRepository.findById(cartId)
+                .orElseThrow(() -> new EntityNotFoundException("카트가 담겨있는 아이템이 아닙니다."));
+    }
+
 }
