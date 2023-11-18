@@ -9,11 +9,14 @@ import lombok.Getter;
 @Getter
 public class CartResponseDto {
     private Long id;
-    private User user;
     private ProductResponseDto product;
+    private int cartItemCount;
+    private int totalPrice;
 
-    public CartResponseDto(Cart cart, Product product) {
+    public CartResponseDto(Cart cart) {
         this.id = cart.getId();;
-//        this.product = product.getProduct();
+        this.product = new ProductResponseDto(cart.getProduct());
+        this.cartItemCount = cart.getCount();
+        this.totalPrice = cart.getProduct().getPrice() * cart.getCount();
     }
 }

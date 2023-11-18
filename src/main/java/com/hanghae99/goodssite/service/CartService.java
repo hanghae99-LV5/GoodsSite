@@ -1,18 +1,22 @@
 package com.hanghae99.goodssite.service;
 
 import com.hanghae99.goodssite.dto.cart.CartRequestDto;
+import com.hanghae99.goodssite.dto.cart.CartResponseDto;
+import com.hanghae99.goodssite.dto.cart.CartResponseWrapper;
 import com.hanghae99.goodssite.entity.Cart;
 import com.hanghae99.goodssite.entity.Product;
 import com.hanghae99.goodssite.entity.User;
 import com.hanghae99.goodssite.repository.CartRepository;
 import com.hanghae99.goodssite.repository.ProductRepository;
 import com.hanghae99.goodssite.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,10 +35,10 @@ public class CartService {
                 .orElseThrow(() -> new NullPointerException("상품이 존재하지 않습니다."));
 
         // 유저 찾기
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NullPointerException("유저가 존재하지 않습니다."));
+        User user = findUser(userId);
 
         // 이미 존재하는 상품
+        // TODO: 상품 최대개수만큼만 추가 가능
         Optional<Cart> duplicatedCart = cartRepository.findByProduct(product);
         duplicatedCart.ifPresent(item -> {
             throw new IllegalArgumentException("이미 상품이 존재합니다.");
@@ -44,5 +48,28 @@ public class CartService {
         Cart cart = new Cart(requestDto, user, product);
         cartRepository.save(cart);
         return ResponseEntity.status(HttpStatus.OK).body("카트에 아이템이 추가되었습니다.");
+    }
+
+    public CartResponseWrapper cartList(Long userId) {
+        // 유저 찾기
+        User user = findUser(userId);
+
+        // 카트 조회
+        List<Cart> cartList = cartRepository.findByUser(user);
+
+        // 카트에 담긴 물건 총 금액
+        int totalCartPrice = cartList.stream().mapToInt(cart -> cart.getProduct().getPrice() * cart.getCount()).sum();
+
+        // 카트 조회 -> responseDto
+        CartResponseWrapper responseWrapper = new CartResponseWrapper(
+                cartList.stream().map(CartResponseDto::new).toList(),
+                totalCartPrice
+            );
+        return responseWrapper;
+    }
+
+    private User findUser(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("회원이 아니거나 유저를 찾을 수 없습니다."));
     }
 }
